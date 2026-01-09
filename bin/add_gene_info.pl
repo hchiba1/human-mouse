@@ -89,7 +89,7 @@ while (<STDIN>) {
             push @CODING, $output;
         } elsif ($symbols_match eq 'mismatch') {
             push @CODING2, $output;
-        } elsif ($symbols_match eq 'human_extra_suffix') {
+        } elsif ($symbols_match eq 'mouse_extra_suffix') {
             push @CODING3, $output;
         } else {
             push @CODING4, $output;
