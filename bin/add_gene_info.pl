@@ -30,6 +30,7 @@ print join("\t", "human_gene_id", "mouse_gene_id"
            , "human_gene_type", "mouse_gene_type"
            , "gene_type_match"
     ), "\n";
+my @OUTPUT;
 while (<STDIN>) {
     chomp;
     my @f = split(/\t/, $_, -1);
@@ -75,9 +76,12 @@ while (<STDIN>) {
     if ($human_gene_type ne '' && $human_gene_type eq $mouse_gene_type) {
         $gene_type_match = 'match';
     }
-    print join("\t", @f
-               , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
-               , $human_gene_type, $mouse_gene_type
-               , $gene_type_match
-        ), "\n";
+    push @OUTPUT,
+        join("\t", @f
+             , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+             , $human_gene_type, $mouse_gene_type
+             , $gene_type_match
+        );
 }
+
+print join("\n", @OUTPUT), "\n";
