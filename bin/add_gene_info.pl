@@ -28,6 +28,7 @@ close(GENE_INFO);
 my @CODING;
 my @CODING2;
 my @CODING3;
+my @CODING4;
 my @NCRNA;
 my @NCRNA2;
 my @REGION;
@@ -88,8 +89,10 @@ while (<STDIN>) {
             push @CODING, $output;
         } elsif ($symbols_match eq 'mismatch') {
             push @CODING2, $output;
-        } else {
+        } elsif ($symbols_match eq 'human_extra_suffix') {
             push @CODING3, $output;
+        } else {
+            push @CODING4, $output;
         }
     } elsif ($human_gene_type eq 'biological-region' && $gene_type_match eq 'match') {
         my $output = join("\t", @f
@@ -142,6 +145,9 @@ if (@CODING2) {
 }
 if (@CODING3) {
     print CODING join("\n", @CODING3), "\n";
+}
+if (@CODING4) {
+    print CODING join("\n", @CODING4), "\n";
 }
 close(CODING);
 
