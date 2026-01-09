@@ -28,6 +28,9 @@ close(GENE_INFO);
 my @CODING;
 my @CODING2;
 my @CODING3;
+my @REGION;
+my @REGION2;
+my @REGION3;
 my @NON_CODING;
 my @NON_CODING2;
 my @TENTATIVE;
@@ -99,13 +102,23 @@ while (<STDIN>) {
                           , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
                           , $human_gene_type, $mouse_gene_type
             );
-        push @NON_CODING, $output;
+        if ($symbols_match eq 'match') {
+            push @REGION, $output;
+        } elsif ($symbols_match eq 'mismatch') {
+            push @REGION3, $output;
+        } else {
+            push @REGION2, $output;
+        }
     } elsif ($human_gene_type eq 'ncRNA' && $gene_type_match eq 'match') {
         my $output = join("\t", @f
                           , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
                           , $human_gene_type, $mouse_gene_type
             );
-        push @NON_CODING2, $output;
+        if ($symbols_match eq 'match') {
+            push @NON_CODING, $output;
+        } else {
+            push @NON_CODING2, $output;
+        }
     } elsif ($gene_type_match eq 'match') {
         my $output = join("\t", @f
                           , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
@@ -148,6 +161,15 @@ if (@NON_CODING) {
 }
 if (@NON_CODING2) {
     print NC join("\n", @NON_CODING2), "\n";
+}
+if (@REGION) {
+    print NC join("\n", @REGION), "\n";
+}
+if (@REGION2) {
+    print NC join("\n", @REGION2), "\n";
+}
+if (@REGION3) {
+    print NC join("\n", @REGION3), "\n";
 }
 close(NC);
 
