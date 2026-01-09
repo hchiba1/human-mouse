@@ -19,12 +19,15 @@ while (<GENE_INFO>) {
     my @f = split(/\t/, $_, -1);
     my $gene_id = $f[1];
     my $symbol = $f[2];
+    my $gene_type = $f[9];
     $GENE{symbol}{$gene_id} = $symbol;
+    $GENE{type}{$gene_id} = $gene_type;
 }
 close(GENE_INFO);
 
 print join("\t", "human_gene_id", "mouse_gene_id"
            , "human_symbol", "mouse_symbol", "symbol_match"
+           , "human_gene_type", "mouse_gene_type"
     ), "\n";
 while (<STDIN>) {
     chomp;
@@ -58,7 +61,17 @@ while (<STDIN>) {
     } elsif ($mouse_gene_symbol_uc =~ /$human_gene_symbol/) {
         $symbols_match = 'mouse_extra_suffix';
     }
+
+    my $human_gene_type = '';
+    my $mouse_gene_type = '';
+    if ($GENE{type}{$human_gene_id}) {
+        $human_gene_type = $GENE{type}{$human_gene_id};
+    }
+    if ($GENE{type}{$mouse_gene_id}) {
+        $mouse_gene_type = $GENE{type}{$mouse_gene_id};
+    }
     print join("\t", @f
                , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+               , $human_gene_type, $mouse_gene_type
         ), "\n";
 }
