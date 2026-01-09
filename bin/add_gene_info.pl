@@ -156,12 +156,6 @@ print NC join("\t", "human_gene_id", "mouse_gene_id"
               , "human_symbol", "mouse_symbol", "symbol_match"
               , "human_gene_type", "mouse_gene_type"
     ), "\n";
-if (@NCRNA) {
-    print NC join("\n", @NCRNA), "\n";
-}
-if (@NCRNA2) {
-    print NC join("\n", @NCRNA2), "\n";
-}
 if (@REGION) {
     print NC join("\n", @REGION), "\n";
 }
@@ -170,6 +164,12 @@ if (@REGION2) {
 }
 if (@REGION3) {
     print NC join("\n", @REGION3), "\n";
+}
+if (@NCRNA) {
+    print NC join("\n", @NCRNA), "\n";
+}
+if (@NCRNA2) {
+    print NC join("\n", @NCRNA2), "\n";
 }
 close(NC);
 
