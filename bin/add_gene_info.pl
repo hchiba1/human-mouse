@@ -27,6 +27,7 @@ close(GENE_INFO);
 
 my @CODING;
 my @CODING2;
+my @CODING3;
 my @NON_CODING;
 my @NON_CODING2;
 my @TENTATIVE;
@@ -82,11 +83,16 @@ while (<STDIN>) {
                               , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
                 );
             push @CODING, $output;
-        } else {
+        } elsif ($symbols_match eq 'mismatch') {
             my $output = join("\t", @f
                               , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
                 );
             push @CODING2, $output;
+        } else {
+            my $output = join("\t", @f
+                              , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                );
+            push @CODING3, $output;
         }
     } elsif ($human_gene_type eq 'biological-region' && $gene_type_match eq 'match') {
         my $output = join("\t", @f
@@ -126,6 +132,9 @@ if (@CODING) {
 }
 if (@CODING2) {
     print CODING join("\n", @CODING2), "\n";
+}
+if (@CODING3) {
+    print CODING join("\n", @CODING3), "\n";
 }
 close(CODING);
 
