@@ -28,11 +28,11 @@ close(GENE_INFO);
 my @CODING;
 my @CODING2;
 my @CODING3;
+my @NCRNA;
+my @NCRNA2;
 my @REGION;
 my @REGION2;
 my @REGION3;
-my @NON_CODING;
-my @NON_CODING2;
 my @TENTATIVE;
 my @TENTATIVE2;
 while (<STDIN>) {
@@ -115,9 +115,9 @@ while (<STDIN>) {
                           , $human_gene_type, $mouse_gene_type
             );
         if ($symbols_match eq 'match') {
-            push @NON_CODING, $output;
+            push @NCRNA, $output;
         } else {
-            push @NON_CODING2, $output;
+            push @NCRNA2, $output;
         }
     } elsif ($gene_type_match eq 'match') {
         my $output = join("\t", @f
@@ -156,11 +156,11 @@ print NC join("\t", "human_gene_id", "mouse_gene_id"
               , "human_symbol", "mouse_symbol", "symbol_match"
               , "human_gene_type", "mouse_gene_type"
     ), "\n";
-if (@NON_CODING) {
-    print NC join("\n", @NON_CODING), "\n";
+if (@NCRNA) {
+    print NC join("\n", @NCRNA), "\n";
 }
-if (@NON_CODING2) {
-    print NC join("\n", @NON_CODING2), "\n";
+if (@NCRNA2) {
+    print NC join("\n", @NCRNA2), "\n";
 }
 if (@REGION) {
     print NC join("\n", @REGION), "\n";
