@@ -23,7 +23,7 @@ while (<GENE_INFO>) {
 }
 close(GENE_INFO);
 
-print join("\t", "human_gene_id", "mouse_gene_id",           
+print join("\t", "human_gene_id", "mouse_gene_id",
            "human_symbol",
            "mouse_symbol",
            "symbol_match"
