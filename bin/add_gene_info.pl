@@ -58,5 +58,7 @@ while (<STDIN>) {
     } elsif ($mouse_gene_symbol_uc =~ /$human_gene_symbol/) {
         $symbols_match = 'mouse_extra_suffix';
     }
-    print join("\t", @f, $human_gene_symbol, $mouse_gene_symbol, $symbols_match), "\n";
+    print join("\t", @f
+               , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+        ), "\n";
 }
