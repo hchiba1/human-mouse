@@ -31,6 +31,10 @@ print join("\t", "human_gene_id", "mouse_gene_id"
            , "gene_type_match"
     ), "\n";
 my @OUTPUT;
+my @OUTPUT2;
+my @OUTPUT3;
+my @OUTPUT4;
+my @OUTPUT5;
 while (<STDIN>) {
     chomp;
     my @f = split(/\t/, $_, -1);
@@ -76,12 +80,36 @@ while (<STDIN>) {
     if ($human_gene_type ne '' && $human_gene_type eq $mouse_gene_type) {
         $gene_type_match = 'match';
     }
-    push @OUTPUT,
-        join("\t", @f
-             , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
-             , $human_gene_type, $mouse_gene_type
-             , $gene_type_match
+    my $output = join("\t", @f
+                      , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                      , $human_gene_type, $mouse_gene_type
+                      , $gene_type_match
         );
+    if ($human_gene_type eq 'protein-coding' && $gene_type_match eq 'match') {
+        push @OUTPUT, $output;
+    } elsif ($human_gene_type eq 'biological-region' && $gene_type_match eq 'match') {
+        push @OUTPUT2, $output;
+    } elsif ($human_gene_type eq 'ncRNA' && $gene_type_match eq 'match') {
+        push @OUTPUT3, $output;
+    } elsif ($gene_type_match eq 'match') {
+        push @OUTPUT4, $output;
+    } else {
+        push @OUTPUT5, $output;
+    }
 }
 
-print join("\n", @OUTPUT), "\n";
+if (@OUTPUT) {
+    print join("\n", @OUTPUT), "\n";
+}
+if (@OUTPUT2) {
+    print join("\n", @OUTPUT2), "\n";
+}
+if (@OUTPUT3) {
+    print join("\n", @OUTPUT3), "\n";
+}
+if (@OUTPUT4) {
+    print join("\n", @OUTPUT4), "\n";
+}
+if (@OUTPUT5) {
+    print join("\n", @OUTPUT5), "\n";
+}
