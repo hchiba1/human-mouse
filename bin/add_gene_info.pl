@@ -12,14 +12,14 @@ getopts('', \%OPT);
 
 -t and die $USAGE;
 
-my %SYMBOL;
+my %GENE;
 open(GENE_INFO, "gene_info") || die "$!";
 while (<GENE_INFO>) {
     chomp;
     my @f = split(/\t/, $_, -1);
     my $gene_id = $f[1];
     my $symbol = $f[2];
-    $SYMBOL{$gene_id} = $symbol;
+    $GENE{symbol}{$gene_id} = $symbol;
 }
 close(GENE_INFO);
 
@@ -39,11 +39,11 @@ while (<STDIN>) {
     my $mouse_gene_id = $f[1];
     my $human_gene_symbol = '';
     my $mouse_gene_symbol = '';
-    if ($SYMBOL{$human_gene_id}) {
-        $human_gene_symbol = $SYMBOL{$human_gene_id};
+    if ($GENE{symbol}{$human_gene_id}) {
+        $human_gene_symbol = $GENE{symbol}{$human_gene_id};
     }
-    if ($SYMBOL{$mouse_gene_id}) {
-        $mouse_gene_symbol = $SYMBOL{$mouse_gene_id};
+    if ($GENE{symbol}{$mouse_gene_id}) {
+        $mouse_gene_symbol = $GENE{symbol}{$mouse_gene_id};
     }
     my $symbols_match = 'mismatch';
     my $mouse_gene_symbol_uc = uc($mouse_gene_symbol);
