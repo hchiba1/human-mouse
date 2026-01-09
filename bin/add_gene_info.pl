@@ -28,6 +28,7 @@ close(GENE_INFO);
 print join("\t", "human_gene_id", "mouse_gene_id"
            , "human_symbol", "mouse_symbol", "symbol_match"
            , "human_gene_type", "mouse_gene_type"
+           , "gene_type_match"
     ), "\n";
 while (<STDIN>) {
     chomp;
@@ -70,8 +71,13 @@ while (<STDIN>) {
     if ($GENE{type}{$mouse_gene_id}) {
         $mouse_gene_type = $GENE{type}{$mouse_gene_id};
     }
+    my $gene_type_match = 'mismatch';
+    if ($human_gene_type ne '' && $human_gene_type eq $mouse_gene_type) {
+        $gene_type_match = 'match';
+    }
     print join("\t", @f
                , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
                , $human_gene_type, $mouse_gene_type
+               , $gene_type_match
         ), "\n";
 }
