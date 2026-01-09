@@ -25,16 +25,12 @@ while (<GENE_INFO>) {
 }
 close(GENE_INFO);
 
-print join("\t", "human_gene_id", "mouse_gene_id"
-           , "human_symbol", "mouse_symbol", "symbol_match"
-           , "human_gene_type", "mouse_gene_type"
-           , "gene_type_match"
-    ), "\n";
-my @OUTPUT;
-my @OUTPUT2;
-my @OUTPUT3;
-my @OUTPUT4;
-my @OUTPUT5;
+my @CODING;
+my @CODING2;
+my @NON_CODING;
+my @NON_CODING2;
+my @TENTATIVE;
+my @TENTATIVE2;
 while (<STDIN>) {
     chomp;
     my @f = split(/\t/, $_, -1);
@@ -80,36 +76,82 @@ while (<STDIN>) {
     if ($human_gene_type ne '' && $human_gene_type eq $mouse_gene_type) {
         $gene_type_match = 'match';
     }
-    my $output = join("\t", @f
-                      , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
-                      , $human_gene_type, $mouse_gene_type
-                      , $gene_type_match
-        );
     if ($human_gene_type eq 'protein-coding' && $gene_type_match eq 'match') {
-        push @OUTPUT, $output;
+        if ($symbols_match eq 'match') {
+            my $output = join("\t", @f
+                              , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                );
+            push @CODING, $output;
+        } else {
+            my $output = join("\t", @f
+                              , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                );
+            push @CODING2, $output;
+        }
     } elsif ($human_gene_type eq 'biological-region' && $gene_type_match eq 'match') {
-        push @OUTPUT2, $output;
+        my $output = join("\t", @f
+                          , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                          , $human_gene_type, $mouse_gene_type
+            );
+        push @NON_CODING, $output;
     } elsif ($human_gene_type eq 'ncRNA' && $gene_type_match eq 'match') {
-        push @OUTPUT3, $output;
+        my $output = join("\t", @f
+                          , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                          , $human_gene_type, $mouse_gene_type
+            );
+        push @NON_CODING2, $output;
     } elsif ($gene_type_match eq 'match') {
-        push @OUTPUT4, $output;
+        my $output = join("\t", @f
+                          , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                          , $human_gene_type, $mouse_gene_type
+                          , $gene_type_match
+            );
+        push @TENTATIVE, $output;
     } else {
-        push @OUTPUT5, $output;
+        my $output = join("\t", @f
+                          , $human_gene_symbol, $mouse_gene_symbol, $symbols_match
+                          , $human_gene_type, $mouse_gene_type
+                          , $gene_type_match
+            );
+        push @TENTATIVE2, $output;
     }
 }
 
-if (@OUTPUT) {
-    print join("\n", @OUTPUT), "\n";
+open(CODING, ">human-mouse.protein-coding.tsv") || die "$!";
+print CODING join("\t", "human_gene_id", "mouse_gene_id"
+                  , "human_symbol", "mouse_symbol", "symbol_match"
+    ), "\n";
+if (@CODING) {
+    print CODING join("\n", @CODING), "\n";
 }
-if (@OUTPUT2) {
-    print join("\n", @OUTPUT2), "\n";
+if (@CODING2) {
+    print CODING join("\n", @CODING2), "\n";
 }
-if (@OUTPUT3) {
-    print join("\n", @OUTPUT3), "\n";
+close(CODING);
+
+open(NC, ">human-mouse.non-coding.tsv") || die "$!";
+print NC join("\t", "human_gene_id", "mouse_gene_id"
+              , "human_symbol", "mouse_symbol", "symbol_match"
+              , "human_gene_type", "mouse_gene_type"
+    ), "\n";
+if (@NON_CODING) {
+    print NC join("\n", @NON_CODING), "\n";
 }
-if (@OUTPUT4) {
-    print join("\n", @OUTPUT4), "\n";
+if (@NON_CODING2) {
+    print NC join("\n", @NON_CODING2), "\n";
 }
-if (@OUTPUT5) {
-    print join("\n", @OUTPUT5), "\n";
+close(NC);
+
+open(TENTATIVE, ">human-mouse.tentative.tsv") || die "$!";
+print TENTATIVE join("\t", "human_gene_id", "mouse_gene_id"
+               , "human_symbol", "mouse_symbol", "symbol_match"
+               , "human_gene_type", "mouse_gene_type"
+               , "gene_type_match"
+    ), "\n";
+if (@TENTATIVE) {
+    print TENTATIVE join("\n", @TENTATIVE), "\n";
 }
+if (@TENTATIVE2) {
+    print TENTATIVE join("\n", @TENTATIVE2), "\n";
+}
+close(TENTATIVE);
